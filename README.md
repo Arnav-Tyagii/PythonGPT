@@ -119,18 +119,24 @@ flowchart TD
 
     H --> M[(checkpoints/best_model.pt\nval_loss = 1.2676)]
 
-    M --> N[Fine-tuning Pipeline\nfinetune.py]
-    N --> O[download_algorithms.py\nTheAlgorithms/Python\nkeon/algorithms\npygorithm\n863 files]
-    O --> P[finetune_prepare.py\n20× algo repeat\n50MB original mix\n40M tokens total]
-    P --> Q[Fine-tune Trainer\nLR = 5e-5\n3000 iters\ngrad_clip = 0.5]
-    Q --> R[(checkpoints/finetuned_model.pt\nval_loss = 0.4633)]
+    %% Fine-tuning Data Pipeline
+    N([Algorithm Repos\nGitHub API]) --> O[download_algorithms.py\nTheAlgorithms, keon, pygorithm]
+    O --> P[finetune_prepare.py\n20× algo repeat\n50MB original mix]
+    P --> Q[(data/finetune_corpus.txt\n40M tokens)]
 
-    R --> S[Streamlit UI\napp.py]
-    M --> S
+    %% Fine-tuning Process
+    M --> R[finetune.py\nFine-tune Trainer]
+    Q --> R
+    R --> S[Training config:\nLR = 5e-5\n3000 iters\ngrad_clip = 0.5]
+    S --> T[(checkpoints/finetuned_model.pt\nval_loss = 0.4633)]
 
-    S --> T[generate_with_constraints\ntemperature + top-k\ntop-p nucleus sampling\nrepetition penalty]
-    T --> U[fix_common_errors\npost-processing\nquote normalization]
-    U --> V[Generated Python Code\n✓ Syntax validated\nwith ast.parse]
+    %% UI and Inference
+    T --> U[Streamlit UI\napp.py]
+    M --> U
+
+    U --> V[generate_with_constraints\ntop-p nucleus sampling\nrepetition penalty]
+    V --> W[fix_common_errors\npost-processing\nquote normalization]
+    W --> X[Generated Python Code\n✓ Syntax validated\nwith ast.parse]
 ```
 
 ### Training Progress
