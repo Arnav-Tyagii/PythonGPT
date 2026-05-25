@@ -1,4 +1,4 @@
-# 🐍 PythonGPT
+# PythonGPT🐍
 
 > A GPT-style language model built **entirely from scratch** in raw PyTorch, trained on 1GB of filtered Python source code from [The Stack](https://huggingface.co/datasets/bigcode/the-stack-dedup) dataset, and later fine-tuned on curated algorithm implementations.
 
