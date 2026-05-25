@@ -114,7 +114,7 @@ flowchart TD
     H --> I[Cross-entropy loss]
     I --> J[loss.backward]
     J --> K[AdamW optimizer\nselective weight decay\ngrad clip = 1.0]
-    K --> L[Cosine LR schedule\nwarmup 500 iters\n3e-4 → 3e-5]
+    K --> L[Cosine LR schedule\n3e-4 → 3e-5\n27,500 iterations\n(early stopped)]
     L --> H
 
     H --> M[(checkpoints/best_model.pt\nval_loss = 1.2676)]
