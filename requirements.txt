@@ -1,0 +1,8 @@
+torch
+streamlit
+datasets
+tokenizers
+matplotlib
+numpy
+tqdm
+huggingface-hub
