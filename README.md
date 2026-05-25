@@ -64,33 +64,39 @@ def read_csv_file(filepath: str) -> list:
 
 ```mermaid
 graph TD
-    A[Token IDs<br/>shape: B × T] --> B[Token Embedding<br/>vocab_size × n_embd]
-    A --> C[Positional Embedding<br/>block_size × n_embd]
-    B --> D[Add + Dropout]
-    C --> D
+    %% Main Architecture Flow
+    In([Token IDs<br/>B × T]) --> TE[Token Embedding]
+    In --> PE[Positional Embedding]
+    
+    TE --> Add[Add + Dropout]
+    PE --> Add
 
-    D --> E[TransformerBlock × 10]
+    Add --> Blocks
 
-    subgraph E[TransformerBlock × 10 layers]
-        F[LayerNorm pre-norm] --> G[CausalSelfAttention]
-        G --> H[Residual Connection]
-        H --> I[LayerNorm pre-norm]
-        I --> J[FeedForward: Linear → GELU → Linear]
-        J --> K[Residual Connection]
+    subgraph Blocks [TransformerBlock × 10]
+        direction TB
+        LN1[LayerNorm pre-norm] --> Attn[Causal Self-Attention]
+        Attn --> Res1((+))
+        Res1 --> LN2[LayerNorm pre-norm]
+        LN2 --> MLP[MLP: Linear → GELU → Linear]
+        MLP --> Res2((+))
     end
 
-    E --> L[Final LayerNorm]
-    L --> M[LM Head: Linear]
-    M --> N[Logits<br/>shape: B × T × vocab_size]
+    Blocks --> FLN[Final LayerNorm]
+    FLN --> Head[LM Head: Linear]
+    Head --> Out([Logits<br/>B × T × vocab_size])
 
-    subgraph G[CausalSelfAttention]
-        G1[c_attn: Linear → Q K V] --> G2[Split into 8 heads]
-        G2 --> G3[Scaled Dot-Product Attention]
-        G3 --> G4[Causal Mask torch.tril]
-        G4 --> G5[Softmax + Dropout]
-        G5 --> G6[Weighted sum of V]
-        G6 --> G7[c_proj: output projection]
+    %% Attention Internals
+    subgraph Attention [Causal Self-Attention Internals]
+        direction TB
+        QKV[c_attn: Linear → Q, K, V] --> Split[Split into 8 heads]
+        Split --> Dot[Scaled Dot-Product]
+        Dot --> Mask[Causal Mask]
+        Mask --> Soft[Softmax + Dropout]
+        Soft --> Proj[c_proj: Linear]
     end
+
+    Attn -.->|implemented as| QKV
 ```
 
 ### Full System Workflow
