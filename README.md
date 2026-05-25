@@ -71,7 +71,7 @@ graph TD
     TE --> Add[Add + Dropout]
     PE --> Add
 
-    Add --> Blocks
+    Add --> LN1
 
     subgraph Blocks [TransformerBlock × 10]
         direction TB
@@ -82,7 +82,7 @@ graph TD
         MLP --> Res2((+))
     end
 
-    Blocks --> FLN[Final LayerNorm]
+    Res2 --> FLN[Final LayerNorm]
     FLN --> Head[LM Head: Linear]
     Head --> Out([Logits<br/>B × T × vocab_size])
 
