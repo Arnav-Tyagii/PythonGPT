@@ -539,7 +539,7 @@ huggingface-hub
 
 **Arnav Tyagi**
 B.Tech CSE (AI & ML) — Manipal University Jaipur
-[LinkedIn](https://linkedin.com/in/arnav-tyagi) · [Email](mailto:27.arnavtyagi@gmail.com)
+[LinkedIn](https://www.linkedin.com/in/arnav-tyagi-04731027a/) · [Email](mailto:27.arnavtyagi@gmail.com)
 
 ---
 
